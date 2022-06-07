@@ -77,12 +77,12 @@
             inherit inputs nixpkgs home-manager nur user system;            # Also inherit home-manager so it does not need to be defined here.
           }
         );
-        homeConfigurations = (                                                # Non-NixOS configurations
-        import ./nix {
-          inherit (nixpkgs) lib;
-          inherit inputs nixpkgs home-manager nixgl user;
-        }
-      );
+      #  homeConfigurations = (                                                # Non-NixOS configurations
+      #  import ./nix {
+      #    inherit (nixpkgs) lib;
+      #    inherit inputs nixpkgs home-manager nixgl user;
+      #  }
+      #);
 
       };
 }

@@ -1,22 +1,52 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+#  Main system configuration. More information available in configuration.nix(5) man page.
+#
+#  flake.nix
+#   ├─ ./hosts
+#   │   └─ configuration.nix *
+#   └─ ./modules
+#       └─ ./editors
+#           └─ ./neovim
+#               └─ default.nix
+#
 
-			{ config, pkgs,lib, inputs, nixgl,  ... }:
-let 
 
-  user = "blackshadow";
-  home-manager = builtins.fetchGit {
-    url = "https://github.com/nix-community/home-manager.git";
-    rev = "82d6ba7003fcf51e9a5b71ab1923e18d5c00fd6f";
-    ref = "master";
-  };
-in {
+{ config, lib, pkgs, inputs, user,  ... }:
+
+{
   imports =
-    [ # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-    ./packages.nix
-  ];
+    [
+      ./packages.nix
+    ];
+
+   # Define a user account. Don't forget to set a password with ‘passwd’.
+   users.users.${user} = {
+     isNormalUser = true;
+     extraGroups  = [ "wheel"  "networkmanager" "video" "audio" "input" "docker" "jackaudio" ]; # Enable ‘sudo’ for the user.
+     shell = pkgs.zsh;
+   };
+
+   # Set your time zone.
+   time.timeZone = "Asia/Kolkata";
+   # Select internationalisation properties.
+   i18n.defaultLocale = "en_US.UTF-8";
+   console = {
+     font = "Lat2-Terminus16";
+     useXkbConfig = true; # use xkbOptions in tty.
+   };
+
+
+   fonts.fonts = with pkgs; [                # Fonts
+    carlito                                 # NixOS
+    vegur                                   # NixOS
+    source-code-pro
+    font-awesome                            # Icons
+    corefonts                               # MS
+    (nerdfonts.override {                   # Nerdfont Icons override
+      fonts = [
+        "FiraCode"
+      ];
+    })
+   ];
 
   nixpkgs.config = {
     allowUnfree = true;
@@ -42,16 +72,28 @@ in {
   };
 
 
+
+networking.hostName = "nixos"; # Define your hostname.
+# Pick only one of the below networking options.
+# networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+
+
 # Configure network proxy if necessary
 # networking.proxy.default = "http://user:password@proxy:port/";
 # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-# Select internationalisation properties.
-i18n.defaultLocale = "en_US.UTF-8";
-console = {
-  font = "Lat2-Terminus16";
-  useXkbConfig = true; # use xkbOptions in tty.
+
+# Enable the X11 windowing system.
+services.xserver = {
+  enable = true;
+  videoDrivers = ["nouveau"];
+  displayManager = {
+    lightdm.enable = true;
+#	defaultSession = "gnome";
 };
+};
+
 
 
 # Configure keymap in X11
@@ -69,16 +111,6 @@ hardware.pulseaudio.package = pkgs.pulseaudioFull;
 # Enable touchpad support (enabled default in most desktopManager).
 services.xserver.libinput.enable = true;
 
-# Define a user account. Don't forget to set a password with ‘passwd’.
-users.users.${user} = {
-  isNormalUser = true;
-  extraGroups  = [ "wheel"  "networkmanager" "video" "audio" "input" "docker" "jackaudio" ]; # Enable ‘sudo’ for the user.
-  packages = with pkgs; [
-    firefox
-    thunderbird
-    alacritty 
-  ];
-};
 
 
 # Some programs need SUID wrappers, can be configured further or are

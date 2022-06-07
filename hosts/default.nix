@@ -4,7 +4,7 @@
 #  flake.nix 
 #   └─ ./hosts  
 #       ├─ default.nix *
-#       ├─ configuration.nix
+#       ├─ configuration.nix      ### this and home.nix are common config for all hosts
 #       ├─ home.nix
 #       └─ ./desktop OR ./laptop OR ./vm
 #            ├─ ./default.nix
@@ -37,43 +37,7 @@ in
         home-manager.useUserPackages = true;
         home-manager.extraSpecialArgs = { inherit user; };  # Pass flake variable
         home-manager.users.${user} = {
-          imports = [(import ./home.nix)] ++ [(import ./desktop/home.nix)];
-        };
-      }
-    ];
-  };
-
-  laptop = lib.nixosSystem {                                # Laptop profile
-    inherit system;
-    specialArgs = { inherit inputs user ; };
-    modules = [
-      ./laptop
-      ./configuration.nix
-
-      home-manager.nixosModules.home-manager {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.extraSpecialArgs = { inherit user; };
-        home-manager.users.${user} = {
-          imports = [(import ./home.nix)] ++ [(import ./laptop/home.nix)];
-        };
-      }
-    ];
-  };
-
-  vm = lib.nixosSystem {                                    # VM profile
-    inherit system;
-    specialArgs = { inherit inputs user ; };
-    modules = [
-      ./vm
-      ./configuration.nix
-
-      home-manager.nixosModules.home-manager {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.extraSpecialArgs = { inherit user; }; 
-        home-manager.users.${user} = {
-          imports = [(import ./home.nix)] ++ [(import ./vm/home.nix)];
+          imports = [(import ./home.nix)] ++  []; #[(import ./desktop/home.nix)]; here u would be mentioning specific host home.nix 
         };
       }
     ];
