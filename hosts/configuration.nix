@@ -18,9 +18,14 @@
       ./packages.nix
     ];
 
+   # Initial run
+   #users.mutableUsers = false;
+   #users.users.root.initialHashedPassword = "";
+
    # Define a user account. Don't forget to set a password with ‘passwd’.
    users.users.${user} = {
      isNormalUser = true;
+     #initialHashedPassword = "nixos";
      extraGroups  = [ "wheel"  "networkmanager" "video" "audio" "input" "docker" "jackaudio" ]; # Enable ‘sudo’ for the user.
      shell = pkgs.zsh;
    };
@@ -44,6 +49,7 @@
     (nerdfonts.override {                   # Nerdfont Icons override
       fonts = [
         "FiraCode"
+        "SourceCodePro"
       ];
     })
    ];
@@ -57,7 +63,7 @@
   nixpkgs.config.allowUnfreePredicate = (pkg: true);
   nixpkgs.overlays = [
     (import ./overlays.nix)
-    (_: _: { nixgl = inputs.nixgl.defaultPackage.x86_64-linux; })
+    #(_: _: { nixgl = inputs.nixgl.defaultPackage.x86_64-linux; })
   ];
 
   nix.extraOptions = ''experimental-features = nix-command flakes'';
@@ -129,13 +135,6 @@ services.openssh.enable = true;
 # rgb mouse	
 services.ratbagd.enable = true;
 
-# compositor
-services.picom= {
-      enable = true;
-      experimentalBackends = true;
-
-
-    };	
 
 
 

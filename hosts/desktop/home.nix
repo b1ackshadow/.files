@@ -15,7 +15,9 @@
 { pkgs, ...}:
 
 {
-  imports = []; # import any home.nix module as part of hm config.
+  imports = [
+    ( import ../../modules/desktop/awesome-nix/home.nix )
+  ]; # import any home.nix module as part of hm config.
 
   home = {
     packages = with pkgs; [

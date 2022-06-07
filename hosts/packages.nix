@@ -15,7 +15,7 @@
 
 
   ] ++ [
-                #nixgl.packages.x86_64-linux.nixVulkanNvidia
+        #nixgl.packages.x86_64-linux.nixVulkanNvidia
         ];
 }
 

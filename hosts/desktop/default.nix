@@ -26,12 +26,37 @@
   ];
 
   # Use the systemd-boot EFI boot loader.
-  boot.loader = {
-    systemd-boot = {
+  #boot.loader = {
+
+  #  systemd-boot = {
+  #    enable = true;
+  #    configurationLimit = 5;
+  #  };
+  #  efi.canTouchEfiVariables = true;
+  #};
+  boot = {
+    loader.grub = rec {
       enable = true;
-      configurationLimit = 5;
+      efiSupport = true;
+      devices = [ "nodev" ];
+      useOSProber = true; 
+      #gfxmodeBios = "1920x1080";
+      #theme = pkgs.fetchFromGitHub {
+      #  owner = "johdasgran";
+      #  repo = "mr-robot-theme";
+      #  rev = "6f40221ff51fcf7dd9f63391ad7ce4ac9ef53650";
+      #  sha256 = "0f0iqm4hf2m4b9cl4jw9xnwq8w48xm33x9wjjlrbfj9dzpg9kyj8";
+      #};
+      #splashImage = theme + "/background.png";
+      theme = pkgs.fetchFromGitHub {
+        owner = "dracula";
+        repo = "grub";
+        rev = "ad5b6bd4b159fea4950918a5510864ebb551519d";
+        sha256 = "12c76qs6p0fpbn4c3i0va5ibr711fgdhhh4ci86hmd5ss93p4b5y";
+      } + "/dracula";
+      splashImage = theme + "/background.png";
     };
-    efi.canTouchEfiVariables = true;
+    blacklistedKernelModules = [ "xpad" ];
   };
   boot.plymouth.enable =  true;
   
