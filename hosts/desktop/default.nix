@@ -38,6 +38,7 @@
     loader.grub = rec {
       enable = true;
       efiSupport = true;
+      efiInstallAsRemovable = true;
       devices = [ "nodev" ];
       useOSProber = true; 
       #gfxmodeBios = "1920x1080";

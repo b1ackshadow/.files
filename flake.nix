@@ -29,9 +29,7 @@
 #
 #  flake.nix *             
 #   ├─ ./hosts
-#   │   └─ default.nix
-#   └─ ./nix
-#       └─ default.nix
+#      └─ default.nix
 #
 
 

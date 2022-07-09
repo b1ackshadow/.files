@@ -7,8 +7,7 @@
 #   └─ ./modules
 #       ├─ ./editors
 #       │   └─ default.nix
-#       ├─ ./programs
-#       │   └─ default.nix
+#       ├─ ./programs │   └─ default.nix
 #       ├─ ./services
 #       │   └─ default.nix
 #       └─ ./shell
@@ -36,12 +35,39 @@
 
      package = pkgs.go_1_18;
    };
-   services.picom.enable = true;
+
+   programs.vscode = {
+      enable = true;
+      package = pkgs.vscodium;    # You can skip this if you want to use the unfree version
+      extensions = with pkgs.vscode-extensions; [
+        # Some example extensions...
+        dracula-theme.theme-dracula
+        vscodevim.vim
+        golang.go
+        ms-azuretools.vscode-docker
+        yzhang.markdown-all-in-one
+      ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+        {
+          name = "material-palenight-theme";
+          publisher = "whizkydee";
+          version = "2.0.2";
+          sha256 = "113w2iis4zi4z3sqc3vd2apyrh52hbh2gvmxjr5yvjpmrsksclbd";
+
+        }
+      ];
+    };
+
+   #services.picom.enable = true;
+   #services.picom.extraOptions = (builtins.readFile ./picom.conf);
+   #services.picom = {
+   #  enable = true;
+   #  extraOptions = builtins.readFile ./picom.conf;
+   #};
 
    programs.firefox.enable = true;
    programs.alacritty.enable = true;
    home.file = {
-     ".config/picom.conf".text = builtins.readFile ./picom.conf;
+     #".config/picom.conf".text = builtins.readFile ./picom.conf;
    };
 
 

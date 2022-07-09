@@ -11,25 +11,30 @@
   boot.initrd.availableKernelModules = [ "ahci" "ohci_pci" "ehci_pci" "xhci_pci" "usb_storage" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [config.boot.kernelPackages.nvidia_x11_legacy390 ];
+  boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/9719b746-2a4c-4ce1-80bd-62c79292ae68";
+    #{ device = "/dev/disk/by-uuid/95931ed3-f706-4c75-a38f-267dd4bdda2b";
+    { device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/d1ca393c-032b-46b8-8cea-4cc8269e2146";
+    #{ device = "/dev/disk/by-uuid/b675addf-aa6d-4c23-a607-d120a8de771a";
+    #{ device = "/dev/disk/by-label/home";
+    { device = "/dev/disk/by-label/home";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/A07A-AC3F";
+    #{ device = "/dev/disk/by-uuid/2BD0-8C1F";
+    { device = "/dev/disk/by-label/boot";
       fsType = "vfat";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/1177ca58-52d4-4b6b-b4fa-5254cfe379e0"; }
+    [ { device = "/dev/disk/by-uuid/14a304ef-7b0d-49c1-b754-868cccc2a422"; }
+    #[ { device = "/dev/disk/by-label/swap"; }
     ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
