@@ -1,55 +1,68 @@
-#
-# Neovim
-#
-
-{ pkgs, ... }:
-
-{
-  programs = {
-    neovim = {
+pkgs:
+  {
       enable = true;
-      viAlias = true;
       vimAlias = true;
 
+      extraConfig =''
+
+        luafile ~/.files/nvim/settings.lua
+        luafile ~/.files/nvim/treesitter.lua
+        luafile ~/.files/nvim/galaxyline.lua
+        luafile ~/.files/nvim/bufferline.lua
+
+
+        lua << EOF
+        vim.defer_fn(function()
+        vim.cmd [[
+        luafile ~/.files/nvim/lsp.lua
+        luafile ~/.files/nvim/goimports.lua
+        luafile ~/.files/nvim/toggle-term.lua
+
+
+        source ~/.files/nvim/paradise.vim
+
+        ]]
+        end, 100)
+        EOF
+
+        source ~/.files/nvim/vimrc
+      '';
       plugins = with pkgs.vimPlugins; [
 
-        # Syntax
-        vim-nix
-        vim-markdown
+        nvim-web-devicons
+        nvim-tree-lua
 
-        # Quality of life
-        vim-lastplace         # Opens document where you left it
-        auto-pairs            # Print double quotes/brackets/etc.
-        #vim-gitgutter         # See uncommitted changes of file :GitGutterEnable
+      # LSP 
+      nvim-lspconfig
+      nvim-compe
+      emmet-vim   
 
-        # File Tree
-	nerdtree              # File Manager - set in extraConfig to F6
-	
-        # Customization 
-        wombat256-vim         # Color scheme for lightline
-        srcery-vim            # Color scheme for text
+      # eyecandy 
+      nvim-treesitter
+      vim-nix 
+      vim-go
+      indentLine
+      bufferline-nvim
+      galaxyline-nvim
+      nvim-colorizer-lua
+      toggleterm-nvim 
 
-        lightline-vim         # Info bar at bottom
-	indent-blankline-nvim # Indentation lines
-      ];
+      # pretty
+      neoformat
+      vim-commentary
+      auto-pairs
 
-      extraConfig = ''
-        syntax enable                             " Syntax highlighting
-        colorscheme srcery                        " Color scheme text
+      # Fuzzy file finder
+      popup-nvim
+      plenary-nvim
+      telescope-nvim
+      fzf-vim
+      vim-easymotion
 
-        let g:lightline = {
-          \ 'colorscheme': 'wombat',
-          \ }                                     " Color scheme lightline
 
-        highlight Comment cterm=italic gui=italic " Comments become italic
-        hi Normal guibg=NONE ctermbg=NONE         " Remove background, better for personal theme
-        
-        set number                                " Set numbers
+    ] ++ 
 
-        nmap <F6> :NERDTreeToggle<CR>             " F6 opens NERDTree
-      '';
-    };
-  };
+    builtins.attrValues ((import ./packages.nix) pkgs) ;
+
 }
-
 

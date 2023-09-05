@@ -16,12 +16,12 @@
 
 
 
-{ config, pkgs, ... }:
+{ configm, user , pkgs, ... }:
 
 {
 
   imports =                                   # Home Manager Modules
-  (import ../modules/development) ; #++
+  (import ../modules/development) pkgs; #++
    # (import ../modules/programs) ++
    # (import ../modules/services) ++
    # (import ../modules/shell);
@@ -29,17 +29,22 @@
    home.username = "blackshadow";
    home.homeDirectory = "/home/blackshadow";
    programs.home-manager.enable = true;
+   programs.direnv = {
+      enable = true;
+      enableBashIntegration = true; # see note on other shells below
+      nix-direnv.enable = true;
+    };
 
    programs.go = {
      enable = true;
 
-     package = pkgs.go_1_18;
+     package = pkgs.go_1_21;
    };
 
    programs.vscode = {
-      enable = true;
-      package = pkgs.vscodium;    # You can skip this if you want to use the unfree version
-      extensions = with pkgs.vscode-extensions; [
+     enable = true;
+     package = pkgs.vscodium;    # You can skip this if you want to use the unfree version
+     extensions = with pkgs.vscode-extensions; [
         # Some example extensions...
         dracula-theme.theme-dracula
         vscodevim.vim
@@ -56,6 +61,13 @@
         }
       ];
     };
+
+    #programs.neovim = (import builtins.toPath "${}"  )
+    programs.neovim = {
+      enable = false;
+      viAlias = true;
+      vimAlias = true;
+      };
 
    #services.picom.enable = true;
    #services.picom.extraOptions = (builtins.readFile ./picom.conf);
@@ -75,9 +87,9 @@
 
 
 
-     home.packages = with pkgs; [
-       unzip htop gotop 
-       sl #fun
-     ];
-     home.stateVersion = "22.05";
-   }
+   home.packages = with pkgs; [
+     unzip htop gotop 
+     sl #fun
+   ];
+   home.stateVersion = "22.05";
+ }

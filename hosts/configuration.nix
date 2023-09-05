@@ -29,6 +29,7 @@
      extraGroups  = [ "wheel"  "networkmanager" "video" "audio" "input" "docker" "jackaudio" ]; # Enable ‘sudo’ for the user.
      shell = pkgs.zsh;
    };
+   programs.zsh.enable = true;
 
    # Set your time zone.
    time.timeZone = "Asia/Kolkata";
@@ -92,18 +93,23 @@ networking.networkmanager.enable = true;  # Easiest to use and most distros use 
 
 services.picom.enable = true;
 
+
 # Enable the X11 windowing system.
 services.xserver = {
   enable = true;
-  videoDrivers = ["nouveau"];
+  videoDrivers = ["nvidia"];
   displayManager = {
     lightdm.enable = true;
-#	defaultSession = "gnome";
+#	defaultSession = "none+i3";
 };
 };
 
+services.xserver.windowManager.i3.enable = true;
+
+ 
 
 
+  services.xserver.windowManager.openbox.enable = true;
 # Configure keymap in X11
 services.xserver.layout = "us";
 
@@ -112,6 +118,7 @@ services.printing.enable = true;
 
 # Enable sound.
 sound.enable = true;
+sound.mediaKeys.enable = true;
 hardware.pulseaudio.enable = true;
 hardware.pulseaudio.support32Bit = true;
 hardware.pulseaudio.package = pkgs.pulseaudioFull;
@@ -136,7 +143,6 @@ services.openssh.enable = true;
 
 # rgb mouse	
 services.ratbagd.enable = true;
-
 
 
 

@@ -62,8 +62,8 @@
   boot.plymouth.enable =  true;
   
   hardware.enableAllFirmware = true;
-  hardware.nvidia.modesetting.enable = true;
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_390;
+  hardware.nvidia.modesetting.enable = false;
+  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
   
   hardware.opengl = {
     enable = true;
@@ -71,7 +71,15 @@
     driSupport32Bit = true;
     driSupport = true;
     extraPackages = with pkgs; [
-      mesa.drivers libGL vaapiIntel linuxPackages.nvidia_x11_legacy390.out vaapiVdpau libvdpau-va-gl 
+      mesa.drivers libGL vaapiIntel linuxPackages.nvidia_x11.out vaapiVdpau libvdpau-va-gl 
+    ];
+  };
+
+  services.actkbd = {
+    enable = true;
+    bindings = [
+      { keys = [ 114 ]; events = [ "key" ]; command = "${pkgs.alsa-utils}/bin/amixer set 'Master' 10%-"; }
+      { keys = [ 115 ]; events = [ "key" ]; command = "${pkgs.alsa-utils}/bin/amixer set 'Master' 10%+"; }
     ];
   };
   

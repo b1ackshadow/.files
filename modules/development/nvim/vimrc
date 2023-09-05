@@ -1,0 +1,163 @@
+"autocmd BufWritePre *.go :Neoformat <CR> ":lua goimports(1000)<CR> " Auto organize goimports on save
+augroup fmt
+  autocmd!
+  autocmd BufWritePre * silent! undojoin 
+  autocmd BufWritePre * silent! Neoformat
+augroup END
+nmap <f9> :call <SID>SynStack()<CR>
+function! <SID>SynStack()
+    if !exists("*synstack")
+        return
+    endif
+    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
+
+nnoremap <f10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<cr>
+
+set number
+autocmd FileType dashboard set showtabline=0 | autocmd WinLeave <buffer> set showtabline=2
+let g:dashboard_custom_header =[
+\'    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠤⠖⠚⢉⣩⣭⡭⠛⠓⠲⠦⣄⡀⠀⠀⠀⠀⠀⠀⠀  ',
+\'    ⠀⠀⠀⠀⠀⠀⢀⡴⠋⠁⠀⠀⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠳⢦⡀⠀⠀⠀⠀  ',
+\'    ⠀⠀⠀⠀⢀⡴⠃⢀⡴⢳⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⣆⠀⠀⠀  ',
+\'    ⠀⠀⠀⠀⡾⠁⣠⠋⠀⠈⢧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢧⠀⠀  ',
+\'    ⠀⠀⠀⣸⠁⢰⠃⠀⠀⠀⠈⢣⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣇⠀  ',
+\'    ⠀⠀⠀⡇⠀⡾⡀⠀⠀⠀⠀⣀⣹⣆⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⠀  ',
+\'    ⠀⠀⢸⠃⢀⣇⡈⠀⠀⠀⠀⠀⠀⢀⡑⢄⡀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇  ',
+\'    ⠀⠀⢸⠀⢻⡟⡻⢶⡆⠀⠀⠀⠀⡼⠟⡳⢿⣦⡑⢄⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇  ',
+\'    ⠀⠀⣸⠀⢸⠃⡇⢀⠇⠀⠀⠀⠀⠀⡼⠀⠀⠈⣿⡗⠂⠀⠀⠀⠀⠀⠀⠀⢸⠁  ',
+\'    ⠀⠀⡏⠀⣼⠀⢳⠊⠀⠀⠀⠀⠀⠀⠱⣀⣀⠔⣸⠁⠀⠀⠀⠀⠀⠀⠀⢠⡟⠀  ',
+\'    ⠀⠀⡇⢀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⢸⠃⠀  ',
+\'    ⠀⢸⠃⠘⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠁⠀⠀⢀⠀⠀⠀⠀⠀⣾⠀⠀  ',
+\'    ⠀⣸⠀⠀⠹⡄⠀⠀⠈⠁⠀⠀⠀⠀⠀⠀⠀⡞⠀⠀⠀⠸⠀⠀⠀⠀⠀⡇⠀⠀  ',
+\'    ⠀⡏⠀⠀⠀⠙⣆⠀⠀⠀⠀⠀⠀⠀⢀⣠⢶⡇⠀⠀⢰⡀⠀⠀⠀⠀⠀⡇⠀⠀  ',
+\'    ⢰⠇⡄⠀⠀⠀⡿⢣⣀⣀⣀⡤⠴⡞⠉⠀⢸⠀⠀⠀⣿⡇⠀⠀⠀⠀⠀⣧⠀⠀  ',
+\'    ⣸⠀⡇⠀⠀⠀⠀⠀⠀⠉⠀⠀⠀⢹⠀⠀⢸⠀⠀⢀⣿⠇⠀⠀⠀⠁⠀⢸⠀⠀  ',
+\'    ⣿⠀⡇⠀⠀⠀⠀⠀⢀⡤⠤⠶⠶⠾⠤⠄⢸⠀⡀⠸⣿⣀⠀⠀⠀⠀⠀⠈⣇⠀  ',
+\'    ⡇⠀⡇⠀⠀⡀⠀⡴⠋⠀⠀⠀⠀⠀⠀⠀⠸⡌⣵⡀⢳⡇⠀⠀⠀⠀⠀⠀⢹⡀  ',
+\'    ⡇⠀⠇⠀⠀⡇⡸⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠮⢧⣀⣻⢂⠀⠀⠀⠀⠀⠀⢧  ',
+\'    ⣇⠀⢠⠀⠀⢳⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⡎⣆⠀⠀⠀⠀⠀⠘  ',
+\]
+
+
+let g:tmuxline_theme = {
+    \   'a'    : [ 236, 103 ],
+    \   'b'    : [ 253, 239 ],
+    \   'c'    : [ 244, 236 ],
+    \   'x'    : [ 244, 236 ],
+    \   'y'    : [ 253, 239 ],
+    \   'z'    : [ 236, 103 ],
+    \   'win'  : [ 103, 236 ],
+    \   'cwin' : [ 236, 103 ],
+    \   'bg'   : [ 244, 236 ],
+    \ }
+let g:tmuxline_separators = {
+            \ 'left_alt' : '',
+            \ 'left': '\uE0B8',
+            \ 'right_alt' : '',
+            \ 'right' : '\uE0BA',
+            \ 'space' : ' '}
+
+
+" augroup tmuxline
+"   autocmd!
+"   autocmd VimEnter,ColorScheme * silent! Tmuxline vim_statusline_1
+"   autocmd VimLeave * !tmux source-file ~/.tmux.conf
+" augroup END
+" values represent: [ FG, BG, ATTR ]
+"   FG ang BG are color codes
+"   ATTR (optional) is a comma-delimited string of one or more of bold, dim, underscore, etc. For details refer to the STYLE section in the tmux man page
+
+
+map <leader>en :lua vim.lsp.diagnostic.goto_next()<cr>
+map <leader>ep :lua vim.lsp.diagnostic.goto_prev()<cr>
+
+
+let g:indentLine_fileTypeExclude = ['dashboard', 'nix', 'lua'] 
+autocmd VimEnter * Tmuxline 
+autocmd VimLeave * SessionSave
+
+nmap <Leader>ss :<C-u>SessionSave<CR>
+nmap <Leader>sl :<C-u>SessionLoad<CR>
+nnoremap <silent> <Leader>fh :DashboardFindHistory<CR>
+nnoremap <silent> <Leader>ff :DashboardFindFile<CR>
+nnoremap <silent> <Leader>tc :DashboardChangeColorscheme<CR>
+nnoremap <silent> <Leader>fa :DashboardFindWord<CR>
+nnoremap <silent> <Leader>fb :DashboardJumpMark<CR>
+nnoremap <silent> <Leader>cn :DashboardNewFile<CR>
+
+let g:dashboard_custom_shortcut={
+\ 'last_session'       : 'SPC s l',
+\ 'find_history'       : 'SPC f h',
+\ 'find_file'          : 'SPC f f',
+\ 'new_file'           : 'SPC c n',
+\ 'change_colorscheme' : 'SPC t c',
+\ 'find_word'          : 'SPC f a',
+\ 'book_marks'         : 'SPC f b',
+\ }
+
+" Autocomplete html
+autocmd FileType xml,html inoremap </ </<C-x><C-o>
+
+" let g:dashboard_custom_header = [
+"             \'                               ██████████                            ',
+"             \'                            ██████████████                          ',
+"             \'                      ██████████████████    ',
+"             \'                  ████████████████████                               ',
+"             \'              ████████████████████                          ',
+"             \'            ██████████                   ',
+"             \'          ████████        ',
+"             \'          ██████    ███         █                                     ',
+"             \'          ██████████████████  ████                                     ',
+"             \'            ████████████████████████                                   ',
+"             \'              ██████████████████████                                   ',
+"             \'                  ████████████████████████                                   ',
+"             \'                ████████████████████████████████                                   ',
+"             \'                ████████████████████████████████████                                   ',
+"             \'                  ██████████████████      ████████████                                   ',
+"             \'                  ████████████████████████      ██████                                   ',
+"             \'                    ████████████████████████      ██████                                   ',
+"             \'                      ████  ██████████████        ██████                                   ',
+"             \'                          ████████████████      ████████                                   ',
+"             \'                          ████████████████████████████                                   ',
+"             \'                            ████████████████████████                                   ',
+"             \'                            ████████████████████                                   ',
+"             \'                              ████    ████████                                   ',
+"             \'                                      ████████                                   ',
+"             \    ]
+"
+
+augroup SCSS_compile
+  au!
+  autocmd filetype scss setlocal makeprg=sass\ -flags
+augroup END
+
+
+function! SassCompile()
+    let ftype = &filetype 
+    if(ftype == 'scss')
+        "echo ftype
+        execute '! sass --update sass:css --style compressed'
+        "let current =  expand('<sfile>:p:h') "expand('<sfile>:p')
+    endif
+
+endfunction
+
+autocmd BufWritePre *.scss  silent! :! sass --update sass:css --style compressed
+autocmd BufRead *.gohtml  silent! : set ft=html 
+
+" Identation
+noremap <Tab> >>
+nnoremap <S-Tab> <<
+inoremap <S-Tab> <C-D>
+vnoremap <Tab> >gv
+vnoremap <S-Tab> <gv
+
+"vim snipe
+map <leader>s <Plug>(snipe-f)
+map <leader><leader>ge <Plug>(snipe-ge)
+nmap <leader><leader>] <Plug>(snipe-f-xp)
+nmap <leader><leader>[ <Plug>(snipe-F-xp)
+

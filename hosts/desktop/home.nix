@@ -22,11 +22,11 @@
   home = {
     packages = with pkgs; [
       gimp              # Graphical Editor
-      inkscape          # Vector Graphical Editor
-      kdenlive          # Video Editor
-      libreoffice       # Office Packages
-      plex-media-player # Media Player
-      shotcut           # Video Editor
+        inkscape          # Vector Graphical Editor
+        kdenlive          # Video Editor
+        libreoffice       # Office Packages
+        plex-media-player # Media Player
+        shotcut           # Video Editor
     ];
   };
 }

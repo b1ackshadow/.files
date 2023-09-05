@@ -12,6 +12,11 @@
     wget
     piper # mouse rgb
     git
+    openbox
+    ripgrep
+    polybar
+    neovim
+    		
 
 
   ] ++ [
