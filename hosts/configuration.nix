@@ -41,7 +41,7 @@
    };
 
 
-   fonts.fonts = with pkgs; [                # Fonts
+   fonts.packages = with pkgs; [                # Fonts
     carlito                                 # NixOS
     vegur                                   # NixOS
     source-code-pro
@@ -68,7 +68,7 @@
   ];
 
   nix.extraOptions = ''experimental-features = nix-command flakes'';
-  nix.autoOptimiseStore = true;
+  nix.settings.auto-optimise-store = true;
   nix.gc = {
     automatic = true;
     dates = "weekly";
@@ -84,6 +84,8 @@ networking.hostName = "nixos"; # Define your hostname.
 # Pick only one of the below networking options.
 # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
+
 
 
 # Configure network proxy if necessary
@@ -91,7 +93,6 @@ networking.networkmanager.enable = true;  # Easiest to use and most distros use 
 # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
 
-services.picom.enable = true;
 
 
 # Enable the X11 windowing system.
@@ -101,7 +102,8 @@ services.xserver = {
   displayManager = {
     lightdm.enable = true;
 #	defaultSession = "none+i3";
-};
+  };
+  xkbOptions = "caps:swapescape";
 };
 
 services.xserver.windowManager.i3.enable = true;
@@ -123,6 +125,7 @@ hardware.pulseaudio.enable = true;
 hardware.pulseaudio.support32Bit = true;
 hardware.pulseaudio.package = pkgs.pulseaudioFull;
 
+
 # Enable touchpad support (enabled default in most desktopManager).
 services.xserver.libinput.enable = true;
 
@@ -143,6 +146,19 @@ services.openssh.enable = true;
 
 # rgb mouse	
 services.ratbagd.enable = true;
+
+# docker 
+virtualisation.docker.enable = true;
+
+#mongodb
+services.mongodb = {
+  package = pkgs.mongodb-6_0;
+#bind_ip = "0.0.0.0";
+  enable = true;
+  extraConfig = ''
+    operationProfiling.mode: all
+    '';
+};
 
 
 

@@ -19,7 +19,7 @@ let
   pkgs = import nixpkgs {
     inherit system;
     config.allowUnfree = true;                              # Allow proprietary software
-    nixpkgs.overlays = [ nixgl.overlays ];
+    nixpkgs.overlays = []; #[ nixgl.overlays ];
   };
 
   lib = nixpkgs.lib;
@@ -27,7 +27,7 @@ in
 {
   desktop = lib.nixosSystem {                               # Desktop profile
     inherit system;
-    specialArgs = { inherit inputs user nixgl; };        # Pass flake variable
+    specialArgs = { inherit inputs user ; };        # Pass flake variable
     modules = [                                             # Modules that are used.
       nur.nixosModules.nur
       ./desktop

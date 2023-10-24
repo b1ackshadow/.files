@@ -61,7 +61,8 @@
   };
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    neovim-flake.url = "github:jordanisaacs/neovim-flake";
+    #neovim-flake.url = "github:jordanisaacs/neovim-flake";
+    neovim-flake.url = "github:wiltaylor/neovim-flake";
 };
 
   outputs = inputs @ { self, nixpkgs, home-manager, nixgl, nur, ... } : 

@@ -27,6 +27,11 @@
         libreoffice       # Office Packages
         plex-media-player # Media Player
         shotcut           # Video Editor
+        insomnia
+        pavucontrol
+        obsidian
+        postman
+        ranger
     ];
   };
 }
